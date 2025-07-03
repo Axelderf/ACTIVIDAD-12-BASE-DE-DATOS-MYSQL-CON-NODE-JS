@@ -4,157 +4,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 12 - Gestor de Tareas</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --gray-bg: #f8fafc;
+            --gray-border: #e5e7eb;
+            --text-main: #222;
+            --text-muted: #6b7280;
+            --success: #22c55e;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--gray-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 32px 0;
         }
-
         .container {
-            max-width: 800px;
+            max-width: 50%;
             margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.07);
             overflow: hidden;
         }
-
         .header {
-            background: #007bff;
-            color: white;
-            padding: 20px;
+            background: #fff;
+            border-bottom: 1px solid var(--gray-border);
+            padding: 32px 32px 16px 32px;
             text-align: center;
         }
-
-        .auth-section {
-            padding: 30px;
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        .auth-section, .dashboard {
+            padding: 32px;
             display: none;
         }
-
-        .auth-section.active {
+        .auth-section.active, .dashboard.active {
             display: block;
         }
-
         .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        button {
-            background: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-        }
-
-        button:hover {
-            background: #0056b3;
-        }
-
-        .dashboard {
-            padding: 30px;
-            display: none;
-        }
-
-        .dashboard.active {
-            display: block;
-        }
-
-        .task-form {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
             margin-bottom: 20px;
         }
-
-        .task-list {
-            list-style: none;
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-main);
         }
-
-        .task-item {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 10px;
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--gray-bg);
+            color: var(--text-main);
+            transition: border 0.2s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        button {
+            background: var(--primary);
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.2s;
+            margin-right: 8px;
+        }
+        button:hover, .logout-btn:hover {
+            background: var(--primary-hover);
+        }
+        .btn-delete {
+            background: var(--danger);
+        }
+        .btn-delete:hover {
+            background: var(--danger-hover);
+        }
+        .logout-btn {
+            background: var(--gray-border);
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 0;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            transition: background 0.2s, color 0.2s;
+        }
+        .dashboard h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 24px;
         }
-
+        .task-form {
+            background: var(--gray-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            border: 1px solid var(--gray-border);
+        }
+        .task-list {
+            list-style: none;
+        }
+        .task-item {
+            background: #fff;
+            border: 1px solid var(--gray-border);
+            border-radius: 10px;
+            padding: 18px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
         .task-info {
             flex: 1;
         }
-
         .task-title {
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 1.05rem;
         }
-
         .task-description {
-            color: #666;
-            font-size: 14px;
+            color: var(--text-muted);
+            font-size: 0.97rem;
         }
-
         .task-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
-
-        .btn-delete {
-            background: #dc3545;
-        }
-
-        .btn-delete:hover {
-            background: #c82333;
-        }
-
-        .completed {
+        .completed .task-title, .completed .task-description {
             text-decoration: line-through;
-            opacity: 0.6;
+            opacity: 0.5;
         }
-
-        .logout-btn {
-            background: #6c757d;
-            float: right;
-        }
-
-        .logout-btn:hover {
-            background: #545b62;
-        }
-
         .error {
-            color: #dc3545;
+            color: var(--danger);
             margin-top: 10px;
+            font-size: 0.97rem;
         }
-
         .success {
-            color: #28a745;
+            color: var(--success);
             margin-top: 10px;
+            font-size: 0.97rem;
+        }
+        @media (max-width: 600px) {
+            .container, .header, .auth-section, .dashboard {
+                padding: 16px !important;
+            }
+            .header {
+                padding-bottom: 8px !important;
+            }
         }
     </style>
 </head>
@@ -164,70 +191,62 @@
             <h1>Gestor de Tareas</h1>
             <p>Actividad 12 - API REST con Express y MySQL</p>
         </div>
-
         <!-- Sección de Autenticación -->
         <div id="authSection" class="auth-section active">
-            <h2>Iniciar Sesión</h2>
+            <h2 style="font-weight:600; margin-bottom:18px;">Iniciar Sesión</h2>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginEmail">Email:</label>
-                    <input type="email" id="loginEmail" required>
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required autocomplete="username">
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Contraseña:</label>
-                    <input type="password" id="loginPassword" required>
+                    <label for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" required autocomplete="current-password">
                 </div>
                 <button type="submit">Iniciar Sesión</button>
-                <button type="button" onclick="showRegister()">Registrarse</button>
+                <button type="button" onclick="showRegister()" style="background:var(--gray-border); color:var(--text-main);">Registrarse</button>
             </form>
-
-            <h2 id="registerTitle" style="display: none;">Registrarse</h2>
+            <h2 id="registerTitle" style="display: none; font-weight:600; margin-bottom:18px;">Registrarse</h2>
             <form id="registerForm" style="display: none;">
                 <div class="form-group">
-                    <label for="registerEmail">Email:</label>
-                    <input type="email" id="registerEmail" required>
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required autocomplete="username">
                 </div>
                 <div class="form-group">
-                    <label for="registerPassword">Contraseña:</label>
-                    <input type="password" id="registerPassword" required>
+                    <label for="registerPassword">Contraseña</label>
+                    <input type="password" id="registerPassword" required autocomplete="new-password">
                 </div>
                 <button type="submit">Registrarse</button>
-                <button type="button" onclick="showLogin()">Iniciar Sesión</button>
+                <button type="button" onclick="showLogin()" style="background:var(--gray-border); color:var(--text-main);">Iniciar Sesión</button>
             </form>
-
             <div id="authMessage"></div>
         </div>
-
         <!-- Dashboard -->
         <div id="dashboard" class="dashboard">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="dashboard-header">
                 <h2>Mis Tareas</h2>
                 <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
             </div>
-
             <div class="task-form">
-                <h3>Nueva Tarea</h3>
+                <h3 style="font-weight:500; margin-bottom:12px;">Nueva Tarea</h3>
                 <form id="taskForm">
                     <div class="form-group">
-                        <label for="taskTitle">Título:</label>
+                        <label for="taskTitle">Título</label>
                         <input type="text" id="taskTitle" required>
                     </div>
                     <div class="form-group">
-                        <label for="taskDescription">Descripción:</label>
+                        <label for="taskDescription">Descripción</label>
                         <textarea id="taskDescription" rows="3"></textarea>
                     </div>
                     <button type="submit">Agregar Tarea</button>
                 </form>
             </div>
-
             <ul id="taskList" class="task-list">
                 <!-- Las tareas se cargarán aquí dinámicamente -->
             </ul>
-
             <div id="taskMessage"></div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html> 
